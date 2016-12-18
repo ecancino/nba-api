@@ -2,7 +2,7 @@
   "name": "node-together",
   "version": "1.0.0",
   "description": "Node Together Boston",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "./node_modules/.bin/nodemon server.js"
   },
@@ -18,17 +18,16 @@
   },
   "homepage": "https://github.com/ecancino/node-together#readme",
   "dependencies": {
-    "express": "4.14.0",
-    "motivations": "1.0.10",
-    "nodemon": "^1.10.2",
-    "pick-one": "1.0.1"
-  },
-  "devDependencies": {
     "compression": "^1.6.2",
+    "express": "4.14.0",
     "helmet": "^2.1.2",
+    "lodash": "^4.17.2",
     "moment": "^2.14.1",
     "morgan": "^1.7.0",
+    "motivations": "1.0.10",
     "node-uuid": "^1.4.7",
+    "nodemon": "^1.10.2",
+    "pick-one": "1.0.1",
     "pug": "^2.0.0-beta5",
     "tachyons": "^4.1.2"
   }
