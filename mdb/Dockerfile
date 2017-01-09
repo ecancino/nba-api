@@ -1,5 +1,5 @@
 # Pull base image.
-FROM dockerfile/ubuntu
+FROM ubuntu:16.04
 
 # Install MongoDB.
 RUN \
@@ -9,6 +9,9 @@ RUN \
   apt-get install -y mongodb-org && \
   rm -rf /var/lib/apt/lists/*
 
+# Set environment
+ENV HOME=/home/mongodb
+
 # Define mountable directories.
 VOLUME ["/data/db"]
 
@@ -17,6 +20,10 @@ WORKDIR /data
 
 # Define default command.
 CMD ["mongod"]
+
+# Import dataset
+COPY shot_logs.csv $HOME/
+# RUN mongoimport --db nba --collection shots --type csv --file /home/mongodb/shot_logs.csv --headerline
 
 # Expose ports.
 #   - 27017: process

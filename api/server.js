@@ -9,5 +9,3 @@ server.use(routes);
 server.listen(port, host, null, () => {
   console.log(`Server running ${host}:${port}...`);
 });
-
-module.exports = server;

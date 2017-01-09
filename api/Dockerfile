@@ -10,7 +10,6 @@ ENV NODE_ENV=production
 
 # Copy files
 COPY package.json $HOME/app/
-COPY api $HOME/app/
 
 # Set owner and permissions
 RUN chown -R nodejs:nodejs $HOME/*
