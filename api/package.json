@@ -22,14 +22,14 @@
     "compression": "^1.6.2",
     "express": "4.14.0",
     "helmet": "^2.1.2",
-    "lodash": "^4.17.2",
+    "install": "^0.8.4",
     "moment": "^2.14.1",
     "mongodb": "^2.2.19",
     "mongoose": "^4.7.6",
     "morgan": "^1.7.0",
     "nodemon": "^1.10.2",
-    "pick-one": "1.0.1",
     "pug": "^2.0.0-beta5",
+    "ramda": "^0.23.0",
     "tachyons": "^4.1.2",
     "uuid": "^3.0.1"
   }
