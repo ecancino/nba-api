@@ -5,7 +5,7 @@ const { map, filter, length } = require('ramda');
 
 const { ShotLogModel } = require('./../models/');
 const {
-  playerName, pointTotal, valueTotal, shotPercentage, shotsMadeTotal
+  capitalizeAll, playerName, pointTotal, valueTotal, shotPercentage, shotsMadeTotal
 } = require('./../utils');
 
 const playersView = map(doc => ({

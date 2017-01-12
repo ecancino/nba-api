@@ -14,12 +14,13 @@ router.use(middleware);
 router.use('/shots', shots);
 router.use('/players', players);
 
+const title = 'NBA Shots';
 const links = [
   { url: '/shots', title: 'Shots' },
   { url: '/players', title: 'Players' }
 ];
 router.get('/', (req, res) => {
-  res.render('index', { links });
+  res.render('index', { title, links });
 });
 
 module.exports = router;

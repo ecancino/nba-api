@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/nba');
+mongoose.connect('mongodb://172.17.0.2:27017/nba');
 
 // models
 const { ShotLogModel } = require('./shot-log');
