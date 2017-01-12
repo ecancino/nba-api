@@ -1,6 +1,5 @@
 'use strict';
 
-const moment = require('moment');
 const express = require('express');
 const router = express();
 const middleware = require('./../middleware');
@@ -18,7 +17,7 @@ router.use('/players', players);
 const links = [
   { url: '/shots', title: 'Shots' },
   { url: '/players', title: 'Players' }
-]
+];
 router.get('/', (req, res) => {
   res.render('index', { links });
 });

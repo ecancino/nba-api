@@ -3,7 +3,7 @@ const {
   groupBy, prop, pick, propEq, negate, ifElse, sum, length
 } = require('ramda');
 
-const capitalize = compose(join(''), juxt([compose(toUpper, head), tail]));
+const capitalize = compose(join(''), juxt([ compose(toUpper, head), tail ]));
 const capitalizeAll = compose(join(' '), map(capitalize), split(' '));
 const groupByProp = propName => groupBy(prop(propName));
 const pickMap = fields => map(pick(fields));

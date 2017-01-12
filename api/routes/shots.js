@@ -1,15 +1,13 @@
 'use strict';
 
 const shots = require('express').Router();
-const moment = require('moment');
 const {
-  map, sortWith, descend, ascend, prop, compose, values, head, length
+  map, sortWith, descend, ascend, prop, compose, values, length
 } = require('ramda');
 
 const { ShotLogModel } = require('./../models/');
 const {
-  capitalize, capitalizeAll, groupByProp, playerName, pickMap,
-  shotsValue, madeShot, shotsMade, shotPoints, pointTotal,
+  groupByProp, playerName, pickMap, pointTotal,
   valueTotal, shotsMadeTotal, shotPercentage, matchInfo
 } = require('./../utils');
 
@@ -21,8 +19,8 @@ const gamesView = map(doc => ({
 
 shots.get('/', (req, res) => {
   ShotLogModel.aggregate([
-    { $group : { _id : '$GAME_ID', game: { $first: "$MATCHUP" } } },
-    { $sort : { game: -1 } }
+    { $group: { _id: '$GAME_ID', game: { $first: '$MATCHUP' } } },
+    { $sort: { game: -1 } }
   ], (err, docs) => res.json(gamesView(docs)));
 });
 
@@ -31,7 +29,7 @@ const sortByPeriodShotResuls = sortWith([
   ascend(prop('PERIOD')),
   descend(prop('SHOT_RESULT'))
 ]);
-const pickForShots = pickMap(['PERIOD', 'SHOT_RESULT', 'PTS_TYPE']);
+const pickForShots = pickMap([ 'PERIOD', 'SHOT_RESULT', 'PTS_TYPE' ]);
 const showShots = compose(values, groupByProp('PERIOD'), sortByPeriodShotResuls, pickForShots);
 
 const valuateShots = map(shots => ({
@@ -45,9 +43,10 @@ const valuateShots = map(shots => ({
 }));
 
 const valuateShooters = compose(sortByValue, values, valuateShots, groupByProp('player_name'));
-
-const gameView = (shots) =>
-  ({ game: matchInfo(shots), shooters: valuateShooters(shots) });
+const gameView = shots => ({
+  game: matchInfo(shots),
+  shooters: valuateShooters(shots)
+});
 
 shots.get('/:GAME_ID', (req, res) => {
   const { GAME_ID } = req.params;

@@ -1,22 +1,19 @@
 {
-  "name": "node-together",
+  "name": "nba-api",
   "version": "1.0.0",
-  "description": "Node Together Boston",
-  "main": "server.js",
+  "description": "NBA Shot API",
+  "main": "api/server.js",
   "scripts": {
     "start": "./node_modules/.bin/nodemon server.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ecancino/node-together.git"
+    "url": "git+https://github.com/ecancino/nba-api.git"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ecancino/node-together/issues"
-  },
-  "homepage": "https://github.com/ecancino/node-together#readme",
+  "license": "MIT",
+  "homepage": "https://github.com/ecancino/nba-api#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
