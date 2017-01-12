@@ -5,6 +5,7 @@ const express = require('express');
 const router = express();
 const middleware = require('./../middleware');
 const shots = require('./shots');
+const players = require('./players');
 
 router.set('views', `${__dirname}/../views` );
 router.set('view engine', 'pug');
@@ -12,12 +13,14 @@ router.set('view engine', 'pug');
 router.use(express.static('public'));
 router.use(middleware);
 router.use('/shots', shots);
+router.use('/players', players);
 
+const links = [
+  { url: '/shots', title: 'Shots' },
+  { url: '/players', title: 'Players' }
+]
 router.get('/', (req, res) => {
-  const time = moment(req.time).format('MMMM Do YYYY, h:mm:ss a');
-  const title = 'New Journey';
-  const message = 'This is the first step in a long journey';
-  res.render('index', { title, message, time });
+  res.render('index', { links });
 });
 
 module.exports = router;

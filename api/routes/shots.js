@@ -1,38 +1,57 @@
 'use strict';
 
-const R = require('ramda');
-const moment = require('moment');
 const shots = require('express').Router();
+const moment = require('moment');
+const {
+  map, sortWith, descend, ascend, prop, compose, values, head, length
+} = require('ramda');
+
 const { ShotLogModel } = require('./../models/');
+const {
+  capitalize, capitalizeAll, groupByProp, playerName, pickMap,
+  shotsValue, madeShot, shotsMade, shotPoints, pointTotal,
+  valueTotal, shotsMadeTotal, shotPercentage, matchInfo
+} = require('./../utils');
 
-
-const capitalize = R.compose(R.join(''), R.juxt([R.compose(R.toUpper, R.head), R.tail]));
-const capitalizeAll = R.compose(R.join(' '), R.map(capitalize), R.split(' '));
-const shooterName = R.compose(capitalizeAll, R.prop('player_name'), R.head);
-const byShooter = R.groupBy(R.prop('player_name'));
-const madeShot = R.propEq('SHOT_RESULT', 'made');
-const shotsMade = R.filter(madeShot);
-const shotPoints = R.map(R.prop('PTS_TYPE'));
-const pointTotal = R.compose(R.sum, shotPoints, shotsMade);
-const timeValue = (clock) => +clock.replace(':', '.') / 10;
-const shotValueMade = (shot) => parseInt(shot.PTS_TYPE * (shot.PERIOD * 2) - timeValue(shot.GAME_CLOCK), 10);
-const shotValueMissed = shot => -shotValueMade(shot);
-const shotValue = R.map(R.ifElse(madeShot, shotValueMade, shotValueMissed));
-const valueTotal = R.compose(R.sum, shotValue);
-const percentage = (shots) => parseInt(shotsMade(shots).length / shots.length * 100);
-const sortByValue = R.sortWith([ R.descend(R.prop('value')) ]);
-const valuateShots = R.map((shots) => ({ shooter: shooterName(shots), value: valueTotal(shots) }));
-const mostValuablePlayers = R.compose(sortByValue, R.values, valuateShots, byShooter);
-const mvp = (docs) => ({ game: R.head(docs).MATCHUP, shooters: mostValuablePlayers(docs) });
-const links = R.map(doc => `http://localhost:3000/shots/${doc}`);
+const gamesView = map(doc => ({
+  id: doc._id,
+  game: doc.game,
+  link: `http://localhost:3000/shots/${doc._id}`
+}));
 
 shots.get('/', (req, res) => {
-  ShotLogModel.distinct('GAME_ID', (err, docs) => res.json(links(docs)));
+  ShotLogModel.aggregate([
+    { $group : { _id : '$GAME_ID', game: { $first: "$MATCHUP" } } },
+    { $sort : { game: -1 } }
+  ], (err, docs) => res.json(gamesView(docs)));
 });
+
+const sortByValue = sortWith([ descend(prop('value')) ]);
+const sortByPeriodShotResuls = sortWith([
+  ascend(prop('PERIOD')),
+  descend(prop('SHOT_RESULT'))
+]);
+const pickForShots = pickMap(['PERIOD', 'SHOT_RESULT', 'PTS_TYPE']);
+const showShots = compose(values, groupByProp('PERIOD'), sortByPeriodShotResuls, pickForShots);
+
+const valuateShots = map(shots => ({
+  shooter: playerName(shots),
+  points: pointTotal(shots),
+  value: valueTotal(shots),
+  percentage: shotPercentage(shots),
+  made: shotsMadeTotal(shots),
+  taken: length(shots),
+  shots: showShots(shots)
+}));
+
+const valuateShooters = compose(sortByValue, values, valuateShots, groupByProp('player_name'));
+
+const gameView = (shots) =>
+  ({ game: matchInfo(shots), shooters: valuateShooters(shots) });
 
 shots.get('/:GAME_ID', (req, res) => {
   const { GAME_ID } = req.params;
-  ShotLogModel.find({ GAME_ID }, (err, docs) => res.json(mvp(docs)));
+  ShotLogModel.find({ GAME_ID }, (err, docs) => res.json(gameView(docs)));
 });
 
 module.exports = shots;
