@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://172.17.0.2:27017/nba');
+const hostname = process.env.DB_PORT_27017_TCP_ADDR || 'localhost';
+mongoose.connect(`mongodb://${hostname}:27017/nba`);
 
-// models
+// Models
 const { ShotLogModel } = require('./shot-log');
 
 exports.ShotLogModel = ShotLogModel;
