@@ -8,7 +8,8 @@ const ShotLogSchema = new mongoose.Schema({
   PERIOD: Number,
   GAME_CLOCK: String,
   PTS_TYPE: Number,
-  player_name: String
+  player_name: String,
+  player_id: Number
 });
 const ShotLogModel = mongoose.model('shots', ShotLogSchema);
 

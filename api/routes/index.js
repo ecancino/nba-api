@@ -2,25 +2,23 @@
 
 const express = require('express');
 const router = express();
+
 const middleware = require('./../middleware');
-const shots = require('./shots');
+const root = require('./root');
+const games = require('./games');
 const players = require('./players');
 
+// Views
 router.set('views', `${__dirname}/../views` );
 router.set('view engine', 'pug');
 
+// Middleware
 router.use(express.static('public'));
 router.use(middleware);
-router.use('/shots', shots);
-router.use('/players', players);
 
-const title = 'NBA Shots';
-const links = [
-  { url: '/shots', title: 'Shots' },
-  { url: '/players', title: 'Players' }
-];
-router.get('/', (req, res) => {
-  res.render('index', { title, links });
-});
+// Routes
+router.use('/', root);
+router.use('/games', games);
+router.use('/players', players);
 
 module.exports = router;

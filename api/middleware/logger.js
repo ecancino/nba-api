@@ -7,7 +7,7 @@ const uuid = require('uuid');
 const logDirectory = __dirname + '/../logs/access.log';
 const stream = fs.createWriteStream(logDirectory, { flags: 'a' });
 
-morgan.token('id', (req) => req.id);
+morgan.token('id', req => req.id);
 logger.use((req, res, next) => {
   req.id = uuid.v4();
   next();
